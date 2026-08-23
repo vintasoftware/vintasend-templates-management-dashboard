@@ -1,6 +1,10 @@
 {
   "name": "vintasend-templates-management-dashboard",
   "version": "1.0.0-alpha1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vintasoftware/vintasend-templates-management-dashboard.git"
+  },
   "private": false,
   "scripts": {
     "dev": "next dev",
