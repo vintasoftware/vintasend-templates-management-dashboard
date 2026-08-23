@@ -35,7 +35,9 @@ const renderFilters = (
 
   const fetch = createFetchStub({
     '/api/v1/capabilities': { body: dataResponse({}) },
-    '/api/v1/tags': { body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]) },
+    '/api/v1/tags': {
+      body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]),
+    },
     ...routes,
   });
 
@@ -49,11 +51,14 @@ const renderFilters = (
 };
 
 it('hides a control for a filter the backend cannot honour', async () => {
-  renderFilters({}, {
-    '/api/v1/capabilities': {
-      body: dataResponse({ 'fields.isAbstract': false, 'fields.description': false }),
+  renderFilters(
+    {},
+    {
+      '/api/v1/capabilities': {
+        body: dataResponse({ 'fields.isAbstract': false, 'fields.description': false }),
+      },
     },
-  });
+  );
 
   await waitFor(() => expect(screen.queryByTestId('filter-abstract')).not.toBeInTheDocument());
   expect(screen.queryByLabelText('Description')).not.toBeInTheDocument();

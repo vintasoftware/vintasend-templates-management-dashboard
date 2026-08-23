@@ -15,12 +15,14 @@ of the app.
 ## Request Flow
 
 ### Clerk
+
 - `proxy.ts` uses `clerkMiddleware()` to wrap the request handler
 - Protected routes redirect to `/sign-in` if unauthenticated
 - `app/layout.tsx` wraps the app with `ClerkProvider`
 - Client components use Clerk's hooks or the unified `useAuth()`
 
 ### Auth0 v4
+
 - `proxy.ts` calls `auth0.middleware(request)` which auto-mounts auth routes at `/auth/*`
 - Routes like `/auth/login`, `/auth/logout`, `/auth/callback` are handled automatically
 - The middleware checks sessions using `auth0.getSession(request)` for protected routes
@@ -29,6 +31,7 @@ of the app.
 - No API route handlers needed - everything is handled by the middleware
 
 ### Shared Flow
+
 - `app/layout.tsx` resolves the strategy, wraps the app in the provider
   component, and initializes the `AuthProvider` context for client components.
 - Client components consume auth state via `useAuth()`.
@@ -37,6 +40,7 @@ of the app.
 
 Auth0 v4 introduces a centralized `Auth0Client` instance defined in `lib/auth0.ts`.
 This client:
+
 - Automatically mounts authentication routes via `auth0.middleware()`
 - Manages sessions and rolling session updates
 - Provides `getSession()` for server-side session access

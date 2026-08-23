@@ -123,9 +123,7 @@ describe('RootLayout', () => {
       Record<string, unknown>
     >;
     const body = html.props.children as ReactElement<Record<string, unknown>>;
-    const [layoutContent, toaster] = body.props.children as ReactElement<
-      Record<string, unknown>
-    >[];
+    const [layoutContent, toaster] = body.props.children as ReactElement<Record<string, unknown>>[];
 
     // The shell is a server component tree; render its resolved output.
     const resolved = await (layoutContent.type as (p: unknown) => Promise<ReactElement>)(
@@ -148,9 +146,7 @@ describe('RootLayout', () => {
 
   it('sets the document metadata', () => {
     expect(metadata.title).toBe('VintaSend Templates');
-    expect(metadata.description).toBe(
-      'Manage VintaSend notification templates and their versions',
-    );
+    expect(metadata.description).toBe('Manage VintaSend notification templates and their versions');
   });
 
   it('declares the page language', async () => {

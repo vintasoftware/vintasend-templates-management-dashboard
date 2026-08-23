@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useClerk } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useClerk } from '@clerk/nextjs';
+import { useEffect } from 'react';
 
 export default function SignOutPage() {
   const { signOut } = useClerk();
@@ -9,11 +9,11 @@ export default function SignOutPage() {
 
   useEffect(() => {
     // For Clerk, use the signOut function
-    if (authProvider === "clerk" || !authProvider) {
-      void signOut({ redirectUrl: "/" });
+    if (authProvider === 'clerk' || !authProvider) {
+      void signOut({ redirectUrl: '/' });
     }
     // For Auth0, redirect to the logout endpoint
-    else if (authProvider === "auth0") {
+    else if (authProvider === 'auth0') {
       // Construct Auth0 logout URL on the client
       const returnTo = window.location.origin;
       const logoutUrl = `/api/auth/logout?returnTo=${encodeURIComponent(returnTo)}`;

@@ -134,9 +134,7 @@ describe('filters', () => {
     await screen.findByTestId('template-row-welcome-email-v3');
     await user.click(screen.getByTestId('filter-status-active'));
 
-    await waitFor(() =>
-      expect(lastReplacedQuery().getAll('status')).toEqual(['draft', 'active']),
-    );
+    await waitFor(() => expect(lastReplacedQuery().getAll('status')).toEqual(['draft', 'active']));
   });
 
   it('removes a status that is already on, and drops the parameter with the last one', async () => {
@@ -161,9 +159,7 @@ describe('filters', () => {
 
     await user.click(screen.getByTestId('filter-all-versions'));
 
-    await waitFor(() =>
-      expect(lastReplacedQuery().get('mostRecentActiveVersion')).toBe('false'),
-    );
+    await waitFor(() => expect(lastReplacedQuery().get('mostRecentActiveVersion')).toBe('false'));
   });
 
   it('sends a URL filter straight through to the list request', async () => {

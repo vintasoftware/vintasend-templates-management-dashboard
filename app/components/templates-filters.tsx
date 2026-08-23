@@ -189,7 +189,11 @@ export function TemplatesFilters({
   );
 
   const setDateRange = useCallback(
-    (fromKey: keyof TemplateFilters, toKey: keyof TemplateFilters, range: DateRange | undefined) => {
+    (
+      fromKey: keyof TemplateFilters,
+      toKey: keyof TemplateFilters,
+      range: DateRange | undefined,
+    ) => {
       patchFilters({
         [fromKey]: range?.from ? range.from.toISOString() : undefined,
         [toKey]: range?.to ? range.to.toISOString() : undefined,
@@ -369,9 +373,11 @@ export function TemplatesFilters({
               Abstract
             </Label>
             <Select
-              value={filters.isAbstract === undefined || filters.isAbstract === null
-                ? 'any'
-                : String(filters.isAbstract)}
+              value={
+                filters.isAbstract === undefined || filters.isAbstract === null
+                  ? 'any'
+                  : String(filters.isAbstract)
+              }
               onValueChange={(value) =>
                 patchFilters({ isAbstract: value === 'any' ? undefined : value === 'true' })
               }

@@ -117,7 +117,10 @@ function TagList({ template }: { template: ManagedTemplate }) {
         </Badge>
       ))}
       {hidden > 0 && (
-        <span className="text-xs text-muted-foreground" title={template.tags.map((t) => t.text).join(', ')}>
+        <span
+          className="text-xs text-muted-foreground"
+          title={template.tags.map((t) => t.text).join(', ')}
+        >
           +{hidden}
         </span>
       )}
@@ -132,7 +135,9 @@ function TagList({ template }: { template: ManagedTemplate }) {
  * so the version number is a column of its own rather than a detail, and the
  * actions that write always name both.
  */
-export function createTemplateColumns(options: TemplateColumnOptions): ColumnDef<ManagedTemplate>[] {
+export function createTemplateColumns(
+  options: TemplateColumnOptions,
+): ColumnDef<ManagedTemplate>[] {
   const {
     onViewDetails,
     onCreateVersion,
@@ -200,7 +205,10 @@ export function createTemplateColumns(options: TemplateColumnOptions): ColumnDef
       accessorKey: 'templateManagedBackend',
       header: 'Backend',
       cell: ({ row }) => (
-        <span className="truncate block max-w-[8rem] text-xs" title={row.original.templateManagedBackend}>
+        <span
+          className="truncate block max-w-[8rem] text-xs"
+          title={row.original.templateManagedBackend}
+        >
           {row.original.templateManagedBackend || EMPTY}
         </span>
       ),

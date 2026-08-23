@@ -27,15 +27,7 @@ import { copyToClipboard } from '@/lib/format';
 
 const DEFAULT_CONTEXT = '{\n  \n}';
 
-function RenderedBlock({
-  title,
-  value,
-  testId,
-}: {
-  title: string;
-  value: string;
-  testId: string;
-}) {
+function RenderedBlock({ title, value, testId }: { title: string; value: string; testId: string }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
@@ -200,7 +192,9 @@ export function TemplatePreviewDialog({ template, onClose }: TemplatePreviewDial
 
       return (
         <div className="py-2 space-y-1" data-testid="preview-error">
-          <p className={isUnavailable ? 'text-sm text-muted-foreground' : 'text-sm text-destructive'}>
+          <p
+            className={isUnavailable ? 'text-sm text-muted-foreground' : 'text-sm text-destructive'}
+          >
             {getApiErrorMessage(renderError)}
           </p>
           {isComposition && (

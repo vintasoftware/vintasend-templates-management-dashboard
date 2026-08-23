@@ -35,7 +35,9 @@ import {
 
 const renderPage = (routes: Record<string, StubbedResponse> = {}) => {
   const fetch = createFetchStub({
-    '/api/v1/tags': { body: paginated([tag(), tag({ id: 't2', text: 'Old', slug: 'old', status: 'archived' })]) },
+    '/api/v1/tags': {
+      body: paginated([tag(), tag({ id: 't2', text: 'Old', slug: 'old', status: 'archived' })]),
+    },
     ...routes,
   });
 
@@ -86,7 +88,9 @@ it('offers archive on an active tag and restore on an archived one', async () =>
 
   renderPage();
 
-  await user.click((await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement);
+  await user.click(
+    (await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement,
+  );
   expect(await screen.findByTestId('archive-tag-marketing')).toBeInTheDocument();
   await user.keyboard('{Escape}');
 
@@ -97,9 +101,13 @@ it('offers archive on an active tag and restore on an archived one', async () =>
 it('archives through the dedicated route rather than a status write', async () => {
   const user = userEvent.setup();
 
-  const fetch = renderPage({ '/api/v1/tags/marketing/archive': { body: dataResponse(tag({ status: 'archived' })) } });
+  const fetch = renderPage({
+    '/api/v1/tags/marketing/archive': { body: dataResponse(tag({ status: 'archived' })) },
+  });
 
-  await user.click((await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement);
+  await user.click(
+    (await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement,
+  );
   await user.click(await screen.findByTestId('archive-tag-marketing'));
 
   await waitFor(() =>
@@ -112,7 +120,9 @@ it('warns that renaming regenerates the slug', async () => {
 
   renderPage();
 
-  await user.click((await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement);
+  await user.click(
+    (await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement,
+  );
   await user.click(await screen.findByTestId('rename-tag-marketing'));
 
   expect(await screen.findByTestId('rename-warning')).toHaveTextContent('regenerates the slug');
@@ -125,7 +135,9 @@ it('sends only the text on a rename — the slug is the server’s to derive', a
     '/api/v1/tags/marketing': { body: dataResponse(tag({ text: 'Growth', slug: 'growth' })) },
   });
 
-  await user.click((await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement);
+  await user.click(
+    (await screen.findByTestId('tag-row-marketing')).querySelector('button') as HTMLElement,
+  );
   await user.click(await screen.findByTestId('rename-tag-marketing'));
 
   const input = screen.getByTestId('tag-form-text');

@@ -27,7 +27,9 @@ type Route = StubbedResponse | ((request: Request) => StubbedResponse);
 
 const withTags = (routes: Record<string, Route> = {}) =>
   createFetchStub({
-    '/api/v1/tags': { body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]) },
+    '/api/v1/tags': {
+      body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]),
+    },
     ...routes,
   });
 
@@ -79,10 +81,9 @@ describe('the tag picker', () => {
     const onChange = jest.fn();
     const fetch = withTags(routes);
 
-    renderWithTemplates(
-      <TagPicker value={value} onChange={onChange} allowCreate {...props} />,
-      { fetch: fetch as unknown as typeof globalThis.fetch },
-    );
+    renderWithTemplates(<TagPicker value={value} onChange={onChange} allowCreate {...props} />, {
+      fetch: fetch as unknown as typeof globalThis.fetch,
+    });
 
     return { onChange, fetch };
   };

@@ -118,7 +118,11 @@ export function TagsPageClient() {
           >
             <h2 className="font-semibold text-destructive mb-2">Failed to load tags</h2>
             <p className="text-sm text-muted-foreground mb-4">{getApiErrorMessage(error)}</p>
-            <button type="button" onClick={refetch} className="text-sm underline underline-offset-4">
+            <button
+              type="button"
+              onClick={refetch}
+              className="text-sm underline underline-offset-4"
+            >
               Try again
             </button>
           </div>

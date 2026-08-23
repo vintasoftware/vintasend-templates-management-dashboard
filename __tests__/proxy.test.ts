@@ -168,15 +168,18 @@ describe('proxy — strategy fallback', () => {
     process.env.AUTH_PROVIDER = 'custom';
   });
 
-  it.each(['/sign-in', '/sign-out', '/auth/callback', '/_next/static/chunk.js', '/public/logo.svg'])(
-    'lets the public route %s through without resolving a strategy',
-    async (path) => {
-      const result = (await proxy(makeRequest(path), event)) as NextResponse;
+  it.each([
+    '/sign-in',
+    '/sign-out',
+    '/auth/callback',
+    '/_next/static/chunk.js',
+    '/public/logo.svg',
+  ])('lets the public route %s through without resolving a strategy', async (path) => {
+    const result = (await proxy(makeRequest(path), event)) as NextResponse;
 
-      expect(resolveAuthStrategy).not.toHaveBeenCalled();
-      expect(result.headers.get('location')).toBeNull();
-    },
-  );
+    expect(resolveAuthStrategy).not.toHaveBeenCalled();
+    expect(result.headers.get('location')).toBeNull();
+  });
 
   it('continues when the strategy allows the request', async () => {
     const protectRoute = jest.fn().mockResolvedValue(null);

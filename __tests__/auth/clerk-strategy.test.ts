@@ -165,9 +165,7 @@ describe('ClerkStrategy.getCurrentUser', () => {
   });
 
   it('reports a null name when no name field is set', async () => {
-    currentUser.mockResolvedValue(
-      clerkUser({ fullName: null, firstName: null, lastName: null }),
-    );
+    currentUser.mockResolvedValue(clerkUser({ fullName: null, firstName: null, lastName: null }));
 
     await expect(strategy.getCurrentUser()).resolves.toMatchObject({ name: null });
   });

@@ -1,10 +1,10 @@
-import type { ComponentType, ReactNode } from "react";
-import type { NextRequest, NextResponse } from "next/server";
+import type { ComponentType, ReactNode } from 'react';
+import type { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Supported auth providers for the dashboard.
  */
-export type AuthProvider = "clerk" | "auth0";
+export type AuthProvider = 'clerk' | 'auth0';
 
 /**
  * Normalized user data shared across strategies.

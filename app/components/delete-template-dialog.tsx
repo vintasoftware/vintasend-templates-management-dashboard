@@ -125,9 +125,7 @@ export function DeleteTemplateDialog({ template, onClose, onDeleted }: DeleteTem
               <SelectItem value="version">
                 Only v{template?.version ?? ''} of {template?.key ?? ''}
               </SelectItem>
-              <SelectItem value="template">
-                Every version of {template?.key ?? ''}
-              </SelectItem>
+              <SelectItem value="template">Every version of {template?.key ?? ''}</SelectItem>
             </SelectContent>
           </Select>
         </div>

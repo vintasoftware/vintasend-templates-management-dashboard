@@ -1,14 +1,8 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
-import { useUser } from "@clerk/nextjs";
-import type { AuthUser } from "./types";
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { useUser } from '@clerk/nextjs';
+import type { AuthUser } from './types';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -29,18 +23,13 @@ interface AuthProviderProps {
 /**
  * Client-side provider for resolved auth state and URLs.
  */
-export function AuthProvider({
-  children,
-  signInUrl,
-  signOutUrl,
-  initialUser,
-}: AuthProviderProps) {
+export function AuthProvider({ children, signInUrl, signOutUrl, initialUser }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(initialUser);
-  
+
   // Check which auth provider is being used
   const authProvider = process.env.NEXT_PUBLIC_AUTH_PROVIDER || process.env.AUTH_PROVIDER;
-  const isClerk = authProvider === "clerk" || !authProvider;
-  
+  const isClerk = authProvider === 'clerk' || !authProvider;
+
   // Always call the hook (rules of hooks), but only use it for Clerk
   const { user: clerkUser, isLoaded } = useUser();
 
@@ -51,8 +40,8 @@ export function AuthProvider({
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setUser({
           id: clerkUser.id,
-          email: clerkUser.primaryEmailAddress?.emailAddress || "",
-          name: clerkUser.fullName || clerkUser.firstName || "",
+          email: clerkUser.primaryEmailAddress?.emailAddress || '',
+          name: clerkUser.fullName || clerkUser.firstName || '',
           imageUrl: clerkUser.imageUrl,
         });
       } else {
@@ -68,9 +57,7 @@ export function AuthProvider({
     signOutUrl,
   };
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 /**
@@ -79,7 +66,7 @@ export function AuthProvider({
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

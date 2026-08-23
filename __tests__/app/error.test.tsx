@@ -90,9 +90,7 @@ describe('TemplatesError', () => {
       renderBoundary(new Error('connect ECONNREFUSED 127.0.0.1:3333'));
 
       expect(screen.queryByText('Error details')).not.toBeInTheDocument();
-      expect(
-        screen.queryByText('connect ECONNREFUSED 127.0.0.1:3333'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('connect ECONNREFUSED 127.0.0.1:3333')).not.toBeInTheDocument();
     });
   });
 });

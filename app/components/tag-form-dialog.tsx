@@ -107,9 +107,7 @@ export function TagFormDialog({ target, onClose }: TagFormDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{isCreate ? 'New tag' : `Rename ${tag?.text}`}</DialogTitle>
-          <DialogDescription>
-            The slug is generated from the name by the server.
-          </DialogDescription>
+          <DialogDescription>The slug is generated from the name by the server.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

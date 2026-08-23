@@ -35,7 +35,9 @@ const renderDialog = (
   routes: Record<string, StubbedResponse | ((request: Request) => StubbedResponse)> = {},
 ) => {
   const fetch = createFetchStub({
-    '/api/v1/tags': { body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]) },
+    '/api/v1/tags': {
+      body: paginated([tag(), tag({ id: 't2', text: 'Billing', slug: 'billing' })]),
+    },
     ...routes,
   });
 
@@ -48,10 +50,9 @@ describe('the version form', () => {
   it('sends only the fields that changed, because an omitted one is carried forward', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(
-      <TemplateFormDialog target={template()} onClose={jest.fn()} />,
-      { '/versions': { body: dataResponse(template({ version: 4 })) } },
-    );
+    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={jest.fn()} />, {
+      '/versions': { body: dataResponse(template({ version: 4 })) },
+    });
 
     const name = screen.getByTestId('form-name');
     await user.clear(name);
@@ -59,7 +60,9 @@ describe('the version form', () => {
 
     await user.click(screen.getByTestId('form-submit'));
 
-    await waitFor(() => expect(requestLog(fetch).some((entry) => entry.startsWith('POST'))).toBe(true));
+    await waitFor(() =>
+      expect(requestLog(fetch).some((entry) => entry.startsWith('POST'))).toBe(true),
+    );
 
     const body = await bodyOf(fetch, 'POST', '/versions');
 
@@ -70,10 +73,9 @@ describe('the version form', () => {
   it('accepts an empty body, which branches a version off unchanged', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(
-      <TemplateFormDialog target={template()} onClose={jest.fn()} />,
-      { '/versions': { body: dataResponse(template({ version: 4 })) } },
-    );
+    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={jest.fn()} />, {
+      '/versions': { body: dataResponse(template({ version: 4 })) },
+    });
 
     await user.click(screen.getByTestId('form-submit'));
 
@@ -167,10 +169,7 @@ describe('the tags dialog', () => {
     const user = userEvent.setup();
 
     const fetch = renderDialog(
-      <TemplateTagsDialog
-        template={template({ tags: [tag()] })}
-        onClose={jest.fn()}
-      />,
+      <TemplateTagsDialog template={template({ tags: [tag()] })} onClose={jest.fn()} />,
       { '/tags': { body: dataResponse(template()) } },
     );
 
@@ -190,10 +189,9 @@ describe('the delete dialog', () => {
   it('deletes the single version by default', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(
-      <DeleteTemplateDialog template={template()} onClose={jest.fn()} />,
-      { '/api/v1/templates': { body: dataResponse(null) } },
-    );
+    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={jest.fn()} />, {
+      '/api/v1/templates': { body: dataResponse(null) },
+    });
 
     await user.click(screen.getByTestId('confirm-delete-template'));
 
@@ -207,10 +205,9 @@ describe('the delete dialog', () => {
   it('deletes every version when the wider scope is chosen', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(
-      <DeleteTemplateDialog template={template()} onClose={jest.fn()} />,
-      { '/api/v1/templates': { body: dataResponse(null) } },
-    );
+    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={jest.fn()} />, {
+      '/api/v1/templates': { body: dataResponse(null) },
+    });
 
     await user.click(screen.getByTestId('delete-scope'));
     await user.click(await screen.findByText('Every version of welcome-email'));

@@ -1,24 +1,14 @@
-import type { ComponentType, ReactNode } from "react";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { ClerkProvider } from "@clerk/nextjs";
-import {
-  auth,
-  clerkClient,
-  currentUser,
-  getAuth,
-  type User,
-} from "@clerk/nextjs/server";
-import type { AuthStrategy, AuthUser } from "../types";
+import type { ComponentType, ReactNode } from 'react';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import { ClerkProvider } from '@clerk/nextjs';
+import { auth, clerkClient, currentUser, getAuth, type User } from '@clerk/nextjs/server';
+import type { AuthStrategy, AuthUser } from '../types';
 
 const mapClerkUserToAuthUser = (user: User): AuthUser => {
   const primaryEmail =
-    user.primaryEmailAddress?.emailAddress ??
-    user.emailAddresses?.[0]?.emailAddress ??
-    null;
-  const constructedName = [user.firstName, user.lastName]
-    .filter(Boolean)
-    .join(" ");
+    user.primaryEmailAddress?.emailAddress ?? user.emailAddresses?.[0]?.emailAddress ?? null;
+  const constructedName = [user.firstName, user.lastName].filter(Boolean).join(' ');
   const fullName = user.fullName ?? (constructedName ? constructedName : null);
 
   return {
@@ -34,10 +24,7 @@ const mapClerkUserToAuthUser = (user: User): AuthUser => {
  */
 export class ClerkStrategy implements AuthStrategy {
   validateConfig(): string[] {
-    const required = [
-      "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
-      "CLERK_SECRET_KEY",
-    ];
+    const required = ['NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY', 'CLERK_SECRET_KEY'];
 
     return required.filter((key) => !process.env[key]);
   }
@@ -73,11 +60,11 @@ export class ClerkStrategy implements AuthStrategy {
   }
 
   getSignInUrl(): string {
-    return "/sign-in";
+    return '/sign-in';
   }
 
   getSignOutUrl(): string {
-    return "/sign-out";
+    return '/sign-out';
   }
 
   async protectRoute(_request: NextRequest): Promise<NextResponse | null> {

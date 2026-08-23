@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { resolveAuthStrategy } from "@/lib/auth";
-import { AuthProvider } from "@/lib/auth/auth-context";
-import { assertValidAuthConfig } from "@/lib/auth/validate-config";
-import { TopNavbar } from "./components/top-navbar";
-import { Providers } from "./providers";
-import { Toaster } from "@/components/ui/sonner";
-import type { AuthUser } from "@/lib/auth";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import { resolveAuthStrategy } from '@/lib/auth';
+import { AuthProvider } from '@/lib/auth/auth-context';
+import { assertValidAuthConfig } from '@/lib/auth/validate-config';
+import { TopNavbar } from './components/top-navbar';
+import { Providers } from './providers';
+import { Toaster } from '@/components/ui/sonner';
+import type { AuthUser } from '@/lib/auth';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 // The root layout reads the session cookie through `strategy.getCurrentUser()`,
@@ -25,11 +25,11 @@ const geistMono = Geist_Mono({
 // built-in `/_not-found` page — and the layout throws on the auth env vars,
 // which are absent at build time. Opting the whole tree into dynamic rendering
 // keeps the build independent of runtime auth configuration.
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: "VintaSend Templates",
-  description: "Manage VintaSend notification templates and their versions",
+  title: 'VintaSend Templates',
+  description: 'Manage VintaSend notification templates and their versions',
 };
 
 async function RootLayoutContent({
@@ -47,11 +47,7 @@ async function RootLayoutContent({
 }) {
   return (
     <ProviderComponent>
-      <AuthProvider
-        initialUser={currentUser}
-        signInUrl={signInUrl}
-        signOutUrl={signOutUrl}
-      >
+      <AuthProvider initialUser={currentUser} signInUrl={signInUrl} signOutUrl={signOutUrl}>
         {/* Query cache and templates client, inside the session so a signed-out
             user never has a client pointed at the proxy. */}
         <Providers>
@@ -77,9 +73,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootLayoutContent
           ProviderComponent={ProviderComponent}
           currentUser={currentUser}

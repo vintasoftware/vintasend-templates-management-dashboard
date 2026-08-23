@@ -164,7 +164,10 @@ export function TemplateDetail({
             ) : (
               <span className="flex flex-wrap gap-1">
                 {template.tags.map((tag) => (
-                  <Badge key={tag.slug} variant={tag.status === 'archived' ? 'outline' : 'secondary'}>
+                  <Badge
+                    key={tag.slug}
+                    variant={tag.status === 'archived' ? 'outline' : 'secondary'}
+                  >
                     {tag.text}
                     {tag.status === 'archived' && ' (archived)'}
                   </Badge>

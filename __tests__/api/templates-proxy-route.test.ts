@@ -65,11 +65,10 @@ describe('authentication', () => {
   it('answers a signed-out request with a JSON 401 rather than a redirect', async () => {
     isAuthenticated.mockResolvedValue(false);
 
-    const response = await GET(request('/api/templates/api/v1/templates'), context([
-      'api',
-      'v1',
-      'templates',
-    ]));
+    const response = await GET(
+      request('/api/templates/api/v1/templates'),
+      context(['api', 'v1', 'templates']),
+    );
 
     expect(response.status).toBe(401);
     await expect(response.json()).resolves.toEqual({
@@ -101,11 +100,10 @@ describe('configuration', () => {
   it('refuses to forward when the API url or key is missing', async () => {
     delete process.env.TEMPLATES_API_KEY;
 
-    const response = await GET(request('/api/templates/api/v1/templates'), context([
-      'api',
-      'v1',
-      'templates',
-    ]));
+    const response = await GET(
+      request('/api/templates/api/v1/templates'),
+      context(['api', 'v1', 'templates']),
+    );
 
     expect(response.status).toBe(500);
     expect(fetchMock).not.toHaveBeenCalled();
@@ -121,7 +119,9 @@ describe('forwarding', () => {
 
     const [target, init] = fetchMock.mock.calls[0];
 
-    expect(String(target)).toBe('https://api.test/api/v1/templates?status=draft&status=active&page=2');
+    expect(String(target)).toBe(
+      'https://api.test/api/v1/templates?status=draft&status=active&page=2',
+    );
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer secret-key');
     expect(init.cache).toBe('no-store');
   });
@@ -172,11 +172,10 @@ describe('forwarding', () => {
   it('reports an unreachable API as INTERNAL_ERROR — this contract has no UPSTREAM_ERROR', async () => {
     fetchMock.mockRejectedValue(new Error('ECONNREFUSED'));
 
-    const response = await GET(request('/api/templates/api/v1/templates'), context([
-      'api',
-      'v1',
-      'templates',
-    ]));
+    const response = await GET(
+      request('/api/templates/api/v1/templates'),
+      context(['api', 'v1', 'templates']),
+    );
 
     expect(response.status).toBe(503);
     await expect(response.json()).resolves.toEqual({

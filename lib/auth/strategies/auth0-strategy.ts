@@ -1,9 +1,9 @@
-import { Auth0Provider } from "@auth0/nextjs-auth0/client";
-import type { NextRequest, NextResponse } from "next/server";
-import { NextResponse as NextResponseClass } from "next/server";
-import type { ComponentType, ReactNode } from "react";
-import { auth0 } from "../../auth0";
-import type { AuthStrategy, AuthUser } from "../types";
+import { Auth0Provider } from '@auth0/nextjs-auth0/client';
+import type { NextRequest, NextResponse } from 'next/server';
+import { NextResponse as NextResponseClass } from 'next/server';
+import type { ComponentType, ReactNode } from 'react';
+import { auth0 } from '../../auth0';
+import type { AuthStrategy, AuthUser } from '../types';
 
 /**
  * AuthStrategy implementation backed by Auth0 v4.
@@ -11,11 +11,11 @@ import type { AuthStrategy, AuthUser } from "../types";
 export class Auth0Strategy implements AuthStrategy {
   validateConfig(): string[] {
     const required = [
-      "AUTH0_SECRET",
-      "APP_BASE_URL",
-      "AUTH0_DOMAIN",
-      "AUTH0_CLIENT_ID",
-      "AUTH0_CLIENT_SECRET",
+      'AUTH0_SECRET',
+      'APP_BASE_URL',
+      'AUTH0_DOMAIN',
+      'AUTH0_CLIENT_ID',
+      'AUTH0_CLIENT_SECRET',
     ];
 
     return required.filter((key) => !process.env[key]);
@@ -34,7 +34,7 @@ export class Auth0Strategy implements AuthStrategy {
 
       const user = session.user;
       return {
-        id: user.sub || "",
+        id: user.sub || '',
         email: user.email || null,
         name: user.name || null,
         imageUrl: user.picture || null,
@@ -54,11 +54,11 @@ export class Auth0Strategy implements AuthStrategy {
   }
 
   getSignInUrl(): string {
-    return "/auth/login";
+    return '/auth/login';
   }
 
   getSignOutUrl(): string {
-    return "/auth/logout";
+    return '/auth/logout';
   }
 
   async protectRoute(request: NextRequest): Promise<NextResponse | null> {
@@ -67,14 +67,14 @@ export class Auth0Strategy implements AuthStrategy {
       if (!session?.user) {
         // Redirect to login
         const signInUrl = new URL(this.getSignInUrl(), request.url);
-        signInUrl.searchParams.set("returnTo", request.nextUrl.pathname);
+        signInUrl.searchParams.set('returnTo', request.nextUrl.pathname);
         return NextResponseClass.redirect(signInUrl);
       }
       return null;
     } catch {
       // On error, redirect to login
       const signInUrl = new URL(this.getSignInUrl(), request.url);
-      signInUrl.searchParams.set("returnTo", request.nextUrl.pathname);
+      signInUrl.searchParams.set('returnTo', request.nextUrl.pathname);
       return NextResponseClass.redirect(signInUrl);
     }
   }

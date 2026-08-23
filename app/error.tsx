@@ -30,9 +30,7 @@ export default function TemplatesError({ error, reset }: ErrorProps) {
           <div className="flex items-start gap-4">
             <AlertCircle className="h-6 w-6 text-destructive shrink-0 mt-0.5" />
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-destructive mb-2">
-                Something went wrong
-              </h2>
+              <h2 className="text-xl font-semibold text-destructive mb-2">Something went wrong</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 The page could not be rendered. This is usually a temporary problem or a
                 misconfigured API URL — check that TEMPLATES_API_URL and TEMPLATES_API_KEY are set.

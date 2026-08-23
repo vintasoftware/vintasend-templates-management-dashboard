@@ -74,9 +74,7 @@ export function TemplateTagsDialog({ template, onClose }: TemplateTagsDialogProp
         <DialogHeader>
           <DialogTitle>Edit tags</DialogTitle>
           <DialogDescription>
-            {template
-              ? `Replaces every tag on ${template.key} v${template.version}.`
-              : null}
+            {template ? `Replaces every tag on ${template.key} v${template.version}.` : null}
           </DialogDescription>
         </DialogHeader>
 

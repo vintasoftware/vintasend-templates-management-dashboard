@@ -214,7 +214,8 @@ export async function bodyOf(
     return request.method === method && new URL(request.url).pathname.includes(path);
   });
 
-  if (!call) throw new Error(`No ${method} request to ${path}. Saw: ${requestLog(fetch).join(', ')}`);
+  if (!call)
+    throw new Error(`No ${method} request to ${path}. Saw: ${requestLog(fetch).join(', ')}`);
 
   return (await (call[0] as Request).clone().json()) as Record<string, unknown>;
 }

@@ -87,7 +87,9 @@ it('asks for the whole key’s status history, not just this version’s', async
 
   await waitFor(() =>
     expect(
-      requestLog(fetch).some((entry) => entry.includes('/status-history') && !entry.includes('version=')),
+      requestLog(fetch).some(
+        (entry) => entry.includes('/status-history') && !entry.includes('version='),
+      ),
     ).toBe(true),
   );
 });

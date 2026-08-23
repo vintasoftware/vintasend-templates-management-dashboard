@@ -34,7 +34,12 @@ export interface TagPickerProps {
  * that already includes an archived slug is preserved rather than silently
  * dropped — it is still shown as a chip below the list.
  */
-export function TagPicker({ value, onChange, disabled = false, allowCreate = false }: TagPickerProps) {
+export function TagPicker({
+  value,
+  onChange,
+  disabled = false,
+  allowCreate = false,
+}: TagPickerProps) {
   const { data, isLoading } = useTagsQuery({ status: ['active'], pageSize: TAG_PAGE_SIZE });
   const createTag = useCreateTag();
 
