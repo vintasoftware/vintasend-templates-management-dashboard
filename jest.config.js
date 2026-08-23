@@ -23,6 +23,23 @@ const customJestConfig = {
       '<rootDir>/node_modules/vintasend-templates-management-dashboard-core/dist/next/index.js',
     '^vintasend-templates-management-dashboard-core$':
       '<rootDir>/node_modules/vintasend-templates-management-dashboard-core/dist/index.js',
+
+    // The core declares `react` and `next` as peer dependencies but installs
+    // its own copies as devDependencies. Once it is linked from the sibling
+    // directory — `npm link`, or the `file:` specs that the repo-wide local
+    // check script writes — Jest resolves those imports out of the core's
+    // node_modules instead of ours. That yields a second React whose hook
+    // dispatcher is always null, and a second `next/navigation` that the
+    // suites' `jest.mock('next/navigation')` never intercepts. The same split
+    // hits `@tanstack/react-query`, whose provider context the core's copy
+    // cannot see. Pin every peer dependency the core declares to this
+    // package's copy so the app and the core share one instance of each.
+    '^react$': '<rootDir>/node_modules/react',
+    '^react/(.*)$': '<rootDir>/node_modules/react/$1',
+    '^react-dom$': '<rootDir>/node_modules/react-dom',
+    '^react-dom/(.*)$': '<rootDir>/node_modules/react-dom/$1',
+    '^next/navigation$': '<rootDir>/node_modules/next/navigation',
+    '^@tanstack/react-query$': '<rootDir>/node_modules/@tanstack/react-query',
   },
 
   // The package is ESM, so it also has to be transformed. That is driven by

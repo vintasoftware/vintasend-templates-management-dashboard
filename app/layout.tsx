@@ -19,6 +19,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// The root layout reads the session cookie through `strategy.getCurrentUser()`,
+// so it can only ever be rendered per request. Without this, `next build` tries
+// to prerender the routes that have no other dynamic marker — notably the
+// built-in `/_not-found` page — and the layout throws on the auth env vars,
+// which are absent at build time. Opting the whole tree into dynamic rendering
+// keeps the build independent of runtime auth configuration.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "VintaSend Templates",
   description: "Manage VintaSend notification templates and their versions",
