@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # next@16 requires Node >= 20.9.
+        node-version: [20.x, 22.x, 24.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        # Enforces the coverage thresholds in jest.config.js.
+        run: npm run test:coverage
+
+      - name: Build
+        # `next build` prerenders /_not-found through the root layout, which
+        # resolves the auth strategy and fails closed on a missing provider.
+        # These are throwaway values that only need to be well-formed: no build
+        # step contacts Clerk, Auth0 or the templates API.
+        env:
+          AUTH_PROVIDER: clerk
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ZXhhbXBsZS5jbGVyay5hY2NvdW50cy5kZXYk
+          CLERK_SECRET_KEY: sk_test_ci_build_only_not_a_real_secret
+          TEMPLATES_API_URL: http://localhost:3334
+          TEMPLATES_API_KEY: ci-build-only
+        run: npm run build

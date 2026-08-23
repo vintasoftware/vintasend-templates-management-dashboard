@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "**/*.mts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    // `next build` re-adds ".next/dev/types/**/*.ts" to "include" on every run,
+    // but those validators are written by `next dev` and go stale as soon as a
+    // route is added or removed while the dev server is not running. The build
+    // has its own fresh validators under ".next/types", so keep `tsc --noEmit`
+    // off the dev copies. Next only rewrites "include", so this survives a build.
+    ".next/dev"
+  ]
+}
