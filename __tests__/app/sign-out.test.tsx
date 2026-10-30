@@ -5,9 +5,9 @@
  * configured — a page that only says "Signing out..." would be a security bug.
  */
 
-const signOut = jest.fn();
+const signOut = vi.fn();
 
-jest.mock('@clerk/nextjs', () => ({
+vi.mock('@clerk/nextjs', () => ({
   useClerk: () => ({ signOut }),
 }));
 
@@ -17,7 +17,7 @@ import SignOutPage from '@/app/sign-out/[[...sign-out]]/page';
 const savedProvider = process.env.NEXT_PUBLIC_AUTH_PROVIDER;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 afterEach(() => {
@@ -52,7 +52,7 @@ describe('SignOutPage', () => {
 
   it('sends the browser to the Auth0 logout endpoint with a return URL', () => {
     process.env.NEXT_PUBLIC_AUTH_PROVIDER = 'auth0';
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(<SignOutPage />);
 

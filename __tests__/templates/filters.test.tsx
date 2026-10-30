@@ -17,9 +17,9 @@ import {
   createFetchStub,
   dataResponse,
   paginated,
+  type StubbedResponse,
   TemplatesTestProvider,
   tag,
-  type StubbedResponse,
 } from '../support/templates';
 
 const renderFilters = (
@@ -27,10 +27,10 @@ const renderFilters = (
   routes: Record<string, StubbedResponse> = {},
 ) => {
   const handlers = {
-    patchFilters: jest.fn(),
-    toggleStatus: jest.fn(),
-    toggleTag: jest.fn(),
-    clearFilters: jest.fn(),
+    patchFilters: vi.fn(),
+    toggleStatus: vi.fn(),
+    toggleTag: vi.fn(),
+    clearFilters: vi.fn(),
   };
 
   const fetch = createFetchStub({

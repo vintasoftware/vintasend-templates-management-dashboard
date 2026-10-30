@@ -19,17 +19,17 @@ const renderTable = (
   overrides: Partial<React.ComponentProps<typeof TemplatesTable>> = {},
 ) => {
   const handlers = {
-    onViewDetails: jest.fn(),
-    onViewHistory: jest.fn(),
-    onCreateVersion: jest.fn(),
-    onPreview: jest.fn(),
-    onEditTags: jest.fn(),
-    onChangeStatus: jest.fn(),
-    onDelete: jest.fn(),
-    onRowClick: jest.fn(),
-    onSort: jest.fn(),
-    onNextPage: jest.fn(),
-    onPreviousPage: jest.fn(),
+    onViewDetails: vi.fn(),
+    onViewHistory: vi.fn(),
+    onCreateVersion: vi.fn(),
+    onPreview: vi.fn(),
+    onEditTags: vi.fn(),
+    onChangeStatus: vi.fn(),
+    onDelete: vi.fn(),
+    onRowClick: vi.fn(),
+    onSort: vi.fn(),
+    onNextPage: vi.fn(),
+    onPreviousPage: vi.fn(),
   };
 
   render(

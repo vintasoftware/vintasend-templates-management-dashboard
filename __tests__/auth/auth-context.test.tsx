@@ -6,9 +6,9 @@
  * the seeded user alone even though the hook is still called unconditionally.
  */
 
-const useUser = jest.fn();
+const useUser = vi.fn();
 
-jest.mock('@clerk/nextjs', () => ({
+vi.mock('@clerk/nextjs', () => ({
   useUser: () => useUser(),
 }));
 
@@ -51,7 +51,7 @@ const savedProvider = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   useUser.mockReturnValue({ user: null, isLoaded: false });
 });
 
@@ -174,7 +174,7 @@ describe('AuthProvider', () => {
 
 describe('useAuth', () => {
   it('throws when used outside a provider', () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => render(<Consumer />)).toThrow('useAuth must be used within an AuthProvider');
 

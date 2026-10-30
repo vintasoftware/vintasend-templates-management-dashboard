@@ -1,11 +1,11 @@
-const mockUseAuth = jest.fn();
+const mockUseAuth = vi.fn();
 let pathname = '/';
 
-jest.mock('@/lib/auth/auth-context', () => ({
+vi.mock('@/lib/auth/auth-context', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   usePathname: () => pathname,
 }));
 
@@ -21,7 +21,7 @@ const user = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   pathname = '/';
   mockUseAuth.mockReturnValue({ user, signOutUrl: '/sign-out' });
 });

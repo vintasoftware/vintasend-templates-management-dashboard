@@ -6,12 +6,12 @@
  * archiving is not deleting, and a rename regenerates the slug.
  */
 
-const replace = jest.fn();
+const replace = vi.fn();
 
 let currentSearch = '';
 
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({ replace, push: jest.fn() }),
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace, push: vi.fn() }),
   usePathname: () => '/tags',
   useSearchParams: () => new URLSearchParams(currentSearch),
 }));
@@ -29,8 +29,8 @@ import {
   paginated,
   renderWithTemplates,
   requestLog,
-  tag,
   type StubbedResponse,
+  tag,
 } from '../support/templates';
 
 const renderPage = (routes: Record<string, StubbedResponse> = {}) => {
@@ -52,7 +52,7 @@ const lastReplacedQuery = () =>
   new URL(String(replace.mock.calls.at(-1)?.[0]), 'http://localhost').searchParams;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   currentSearch = '';
 });
 

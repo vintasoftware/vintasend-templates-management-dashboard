@@ -1,10 +1,10 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import {
-  TemplatesProvider,
   createTemplatesClient,
+  TemplatesProvider,
 } from 'vintasend-templates-management-dashboard-core';
 
 /**

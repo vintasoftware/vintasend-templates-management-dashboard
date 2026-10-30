@@ -90,9 +90,16 @@ export function TagsTable({
           <TableBody>
             {isLoading &&
               Array.from({ length: Math.min(pageSize, 10) }).map((_, rowIndex) => (
-                <TableRow key={`skeleton-row-${rowIndex}`}>
+                <TableRow
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                  key={`skeleton-row-${rowIndex}`}
+                >
                   {Array.from({ length: COLUMN_COUNT }).map((_cell, cellIndex) => (
-                    <TableCell key={`skeleton-cell-${rowIndex}-${cellIndex}`} className="py-2 px-3">
+                    <TableCell
+                      // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                      key={`skeleton-cell-${rowIndex}-${cellIndex}`}
+                      className="py-2 px-3"
+                    >
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
                   ))}

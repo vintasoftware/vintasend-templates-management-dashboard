@@ -8,11 +8,11 @@
  * the kind of regression nothing else would catch.
  */
 
-jest.mock('@/app/components/templates-page-client', () => ({
+vi.mock('@/app/components/templates-page-client', () => ({
   TemplatesPageClient: () => <div data-testid="templates-client" />,
 }));
 
-jest.mock('@/app/components/tags-page-client', () => ({
+vi.mock('@/app/components/tags-page-client', () => ({
   TagsPageClient: () => <div data-testid="tags-client" />,
 }));
 

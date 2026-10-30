@@ -1,6 +1,6 @@
 import { Auth0Strategy } from './strategies/auth0-strategy';
 import { ClerkStrategy } from './strategies/clerk-strategy';
-import type { AuthStrategy, AuthProvider } from './types';
+import type { AuthProvider, AuthStrategy } from './types';
 
 const AUTH_PROVIDER_ERROR = 'AUTH_PROVIDER env var is required';
 

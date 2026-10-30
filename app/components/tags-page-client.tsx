@@ -5,10 +5,10 @@ import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import {
   getApiErrorMessage,
+  type ManagedTemplateTag,
   useArchiveTag,
   useFilteredTags,
   useRestoreTag,
-  type ManagedTemplateTag,
 } from 'vintasend-templates-management-dashboard-core';
 import { useNextRouterAdapter } from 'vintasend-templates-management-dashboard-core/next';
 

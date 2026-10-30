@@ -5,40 +5,40 @@
  * render on a bad configuration rather than serve an unauthenticated shell.
  */
 
-const resolveAuthStrategy = jest.fn();
-const assertValidAuthConfig = jest.fn();
+const resolveAuthStrategy = vi.fn();
+const assertValidAuthConfig = vi.fn();
 
-jest.mock('@/lib/auth', () => ({
+vi.mock('@/lib/auth', () => ({
   resolveAuthStrategy: (...args: unknown[]) => resolveAuthStrategy(...(args as [])),
 }));
 
-jest.mock('@/lib/auth/validate-config', () => ({
+vi.mock('@/lib/auth/validate-config', () => ({
   assertValidAuthConfig: (...args: unknown[]) => assertValidAuthConfig(...(args as [])),
 }));
 
-jest.mock('@/lib/auth/auth-context', () => ({
+vi.mock('@/lib/auth/auth-context', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="auth-provider">{children}</div>
   ),
 }));
 
-jest.mock('@/app/components/top-navbar', () => ({
+vi.mock('@/app/components/top-navbar', () => ({
   TopNavbar: () => <nav data-testid="top-navbar" />,
 }));
 
-jest.mock('@/components/ui/sonner', () => ({
+vi.mock('@/components/ui/sonner', () => ({
   Toaster: () => <div data-testid="toaster" />,
 }));
 
-jest.mock('next/font/google', () => ({
+vi.mock('next/font/google', () => ({
   Geist: () => ({ variable: '--font-geist-sans' }),
   Geist_Mono: () => ({ variable: '--font-geist-mono' }),
 }));
 
-jest.mock('@/app/globals.css', () => ({}), { virtual: true });
+vi.mock('@/app/globals.css', () => ({}));
 
-import type { ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
+import type { ReactElement } from 'react';
 import RootLayout, { metadata } from '@/app/layout';
 import type { AuthUser } from '@/lib/auth/types';
 
@@ -54,16 +54,16 @@ const Provider = ({ children }: { children: React.ReactNode }) => (
 );
 
 const makeStrategy = (overrides: Record<string, unknown> = {}) => ({
-  getProviderComponent: jest.fn(() => Provider),
-  getCurrentUser: jest.fn().mockResolvedValue(currentUser),
-  getSignInUrl: jest.fn(() => '/sign-in'),
-  getSignOutUrl: jest.fn(() => '/sign-out'),
+  getProviderComponent: vi.fn(() => Provider),
+  getCurrentUser: vi.fn().mockResolvedValue(currentUser),
+  getSignInUrl: vi.fn(() => '/sign-in'),
+  getSignOutUrl: vi.fn(() => '/sign-out'),
   ...overrides,
 });
 
 beforeEach(() => {
   // reset, not clear: some tests install throwing implementations.
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 describe('RootLayout', () => {

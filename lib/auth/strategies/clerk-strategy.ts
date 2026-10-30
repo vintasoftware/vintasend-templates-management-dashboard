@@ -1,8 +1,8 @@
-import type { ComponentType, ReactNode } from 'react';
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
 import { ClerkProvider } from '@clerk/nextjs';
 import { auth, clerkClient, currentUser, getAuth, type User } from '@clerk/nextjs/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { ComponentType, ReactNode } from 'react';
 import type { AuthStrategy, AuthUser } from '../types';
 
 const mapClerkUserToAuthUser = (user: User): AuthUser => {

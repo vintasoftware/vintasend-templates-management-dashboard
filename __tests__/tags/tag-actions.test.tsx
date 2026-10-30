@@ -19,8 +19,8 @@ import {
   paginated,
   renderWithTemplates,
   requestLog,
-  tag,
   type StubbedResponse,
+  tag,
 } from '../support/templates';
 
 type Route = StubbedResponse | ((request: Request) => StubbedResponse);
@@ -37,7 +37,7 @@ describe('deleting a tag', () => {
   it('points at archiving, which is what most people mean', () => {
     const fetch = withTags();
 
-    renderWithTemplates(<DeleteTagDialog tag={tag()} onClose={jest.fn()} />, {
+    renderWithTemplates(<DeleteTagDialog tag={tag()} onClose={vi.fn()} />, {
       fetch: fetch as unknown as typeof globalThis.fetch,
     });
 
@@ -46,7 +46,7 @@ describe('deleting a tag', () => {
 
   it('deletes by slug', async () => {
     const user = userEvent.setup();
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     const fetch = withTags({ '/api/v1/tags/marketing': { body: dataResponse(null) } });
 
     renderWithTemplates(<DeleteTagDialog tag={tag()} onClose={onClose} />, {
@@ -64,7 +64,7 @@ describe('deleting a tag', () => {
   it('stays closed when there is no tag to delete', () => {
     const fetch = withTags();
 
-    renderWithTemplates(<DeleteTagDialog tag={null} onClose={jest.fn()} />, {
+    renderWithTemplates(<DeleteTagDialog tag={null} onClose={vi.fn()} />, {
       fetch: fetch as unknown as typeof globalThis.fetch,
     });
 
@@ -78,7 +78,7 @@ describe('the tag picker', () => {
     routes: Record<string, Route> = {},
     props: Partial<React.ComponentProps<typeof TagPicker>> = {},
   ) => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const fetch = withTags(routes);
 
     renderWithTemplates(<TagPicker value={value} onChange={onChange} allowCreate {...props} />, {

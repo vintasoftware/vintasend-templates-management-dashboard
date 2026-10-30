@@ -1,6 +1,6 @@
 import { EMPTY, formatDate } from '@/lib/format';
 
-// The suite pins TZ=UTC in jest.config.js, so these are stable off-machine.
+// The suite pins TZ=UTC in vitest.config.mts, so these are stable off-machine.
 it('formats an ISO timestamp', () => {
   expect(formatDate('2024-02-01T09:30:00Z')).toBe('Feb 01, 2024 09:30');
 });

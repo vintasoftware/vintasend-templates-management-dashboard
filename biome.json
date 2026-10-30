@@ -1,0 +1,54 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": [
+      "**",
+      "!.next",
+      "!out",
+      "!build",
+      "!coverage",
+      "!next-env.d.ts",
+      "!**/*.tsbuildinfo",
+      "!**/*.svg"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "arrowParentheses": "always",
+      "bracketSpacing": true
+    }
+  },
+  "css": {
+    "parser": { "tailwindDirectives": true },
+    "formatter": { "quoteStyle": "single" }
+  },
+  "assist": {
+    "includes": ["**", "!components/ui/**"]
+  },
+  "linter": {
+    "enabled": true,
+    "includes": ["**", "!components/ui/**"],
+    "rules": {
+      "preset": "recommended",
+      "a11y": {
+        "noLabelWithoutControl": {
+          "level": "error",
+          "options": { "inputComponents": ["Checkbox"] }
+        }
+      }
+    },
+    "domains": { "next": "recommended", "react": "recommended" }
+  }
+}

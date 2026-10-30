@@ -7,10 +7,10 @@ import type { DateRange } from 'react-day-picker';
 import {
   supportsFilter,
   TEMPLATE_STATUSES,
-  useCapabilities,
-  useTagsQuery,
   type TemplateFilters,
   type TemplateStatus,
+  useCapabilities,
+  useTagsQuery,
 } from 'vintasend-templates-management-dashboard-core';
 
 import { Badge } from '@/components/ui/badge';

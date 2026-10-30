@@ -172,10 +172,11 @@ your own are needed.
 
 ```bash
 npm run dev
-npm run lint
-npm run typecheck
-npm test
-npm run test:coverage
+npm run lint            # biome check (lint + formatting + import order)
+npm run format          # biome check --write
+npm run typecheck       # tsc --noEmit (TypeScript 7)
+npm test                # vitest
+npm run test:coverage   # vitest with the coverage thresholds enforced
 npm run build
 ```
 

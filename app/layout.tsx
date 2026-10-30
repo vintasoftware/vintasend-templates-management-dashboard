@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import type { AuthUser } from '@/lib/auth';
 import { resolveAuthStrategy } from '@/lib/auth';
 import { AuthProvider } from '@/lib/auth/auth-context';
 import { assertValidAuthConfig } from '@/lib/auth/validate-config';
 import { TopNavbar } from './components/top-navbar';
 import { Providers } from './providers';
-import { Toaster } from '@/components/ui/sonner';
-import type { AuthUser } from '@/lib/auth';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

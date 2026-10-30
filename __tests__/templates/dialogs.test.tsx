@@ -21,13 +21,13 @@ import {
   bodyOf,
   createFetchStub,
   dataResponse,
+  type FetchStub,
   paginated,
   renderWithTemplates,
   requestLog,
+  type StubbedResponse,
   tag,
   template,
-  type FetchStub,
-  type StubbedResponse,
 } from '../support/templates';
 
 const renderDialog = (
@@ -50,7 +50,7 @@ describe('the version form', () => {
   it('sends only the fields that changed, because an omitted one is carried forward', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={jest.fn()} />, {
+    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={vi.fn()} />, {
       '/versions': { body: dataResponse(template({ version: 4 })) },
     });
 
@@ -73,7 +73,7 @@ describe('the version form', () => {
   it('accepts an empty body, which branches a version off unchanged', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={jest.fn()} />, {
+    const fetch = renderDialog(<TemplateFormDialog target={template()} onClose={vi.fn()} />, {
       '/versions': { body: dataResponse(template({ version: 4 })) },
     });
 
@@ -85,7 +85,7 @@ describe('the version form', () => {
   it('posts to the collection when creating, with the fields only a first version has', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(<TemplateFormDialog target="create" onClose={jest.fn()} />, {
+    const fetch = renderDialog(<TemplateFormDialog target="create" onClose={vi.fn()} />, {
       '/api/v1/templates': { body: dataResponse(template({ version: 1 })) },
     });
 
@@ -109,7 +109,7 @@ describe('the version form', () => {
   });
 
   it('will not submit a new template without the fields the API requires', async () => {
-    renderDialog(<TemplateFormDialog target="create" onClose={jest.fn()} />);
+    renderDialog(<TemplateFormDialog target="create" onClose={vi.fn()} />);
 
     expect(screen.getByTestId('form-submit')).toBeDisabled();
   });
@@ -120,7 +120,7 @@ describe('the status dialog', () => {
     renderDialog(
       <TemplateStatusDialog
         template={template({ status: 'draft', allowedTransitions: ['active'] })}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />,
     );
 
@@ -132,7 +132,7 @@ describe('the status dialog', () => {
     renderDialog(
       <TemplateStatusDialog
         template={template({ status: 'archived', allowedTransitions: [] })}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />,
     );
 
@@ -145,7 +145,7 @@ describe('the status dialog', () => {
     const fetch = renderDialog(
       <TemplateStatusDialog
         template={template({ version: 2, allowedTransitions: ['archived'] })}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />,
       { '/status': { body: dataResponse(template({ version: 2, status: 'archived' })) } },
     );
@@ -169,7 +169,7 @@ describe('the tags dialog', () => {
     const user = userEvent.setup();
 
     const fetch = renderDialog(
-      <TemplateTagsDialog template={template({ tags: [tag()] })} onClose={jest.fn()} />,
+      <TemplateTagsDialog template={template({ tags: [tag()] })} onClose={vi.fn()} />,
       { '/tags': { body: dataResponse(template()) } },
     );
 
@@ -189,7 +189,7 @@ describe('the delete dialog', () => {
   it('deletes the single version by default', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={jest.fn()} />, {
+    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={vi.fn()} />, {
       '/api/v1/templates': { body: dataResponse(null) },
     });
 
@@ -205,7 +205,7 @@ describe('the delete dialog', () => {
   it('deletes every version when the wider scope is chosen', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={jest.fn()} />, {
+    const fetch = renderDialog(<DeleteTemplateDialog template={template()} onClose={vi.fn()} />, {
       '/api/v1/templates': { body: dataResponse(null) },
     });
 
@@ -231,17 +231,16 @@ describe('the preview dialog', () => {
     });
 
   it('renders once on open, against an empty context', async () => {
-    const fetch = renderDialog(
-      <TemplatePreviewDialog template={template()} onClose={jest.fn()} />,
-      { '/preview': { body: preview() } },
-    );
+    const fetch = renderDialog(<TemplatePreviewDialog template={template()} onClose={vi.fn()} />, {
+      '/preview': { body: preview() },
+    });
 
     expect(await screen.findByTestId('preview-success')).toBeInTheDocument();
     expect(await bodyOf(fetch, 'POST', '/preview')).toEqual({ context: {}, version: 3 });
   });
 
   it('omits a field the renderer did not produce', async () => {
-    renderDialog(<TemplatePreviewDialog template={template()} onClose={jest.fn()} />, {
+    renderDialog(<TemplatePreviewDialog template={template()} onClose={vi.fn()} />, {
       '/preview': { body: preview({ renderedSubject: null }) },
     });
 
@@ -254,10 +253,9 @@ describe('the preview dialog', () => {
   it('refuses to send a context that is not valid JSON', async () => {
     const user = userEvent.setup();
 
-    const fetch = renderDialog(
-      <TemplatePreviewDialog template={template()} onClose={jest.fn()} />,
-      { '/preview': { body: preview() } },
-    );
+    const fetch = renderDialog(<TemplatePreviewDialog template={template()} onClose={vi.fn()} />, {
+      '/preview': { body: preview() },
+    });
 
     await screen.findByTestId('preview-success');
 
@@ -274,7 +272,7 @@ describe('the preview dialog', () => {
   });
 
   it('reads PREVIEW_UNAVAILABLE as an explanation rather than a failure', async () => {
-    renderDialog(<TemplatePreviewDialog template={template()} onClose={jest.fn()} />, {
+    renderDialog(<TemplatePreviewDialog template={template()} onClose={vi.fn()} />, {
       '/preview': {
         status: 422,
         body: {

@@ -1,6 +1,6 @@
 'use client';
 
-import type { ColumnDef } from '@tanstack/react-table';
+import { type ColumnDef, tableFeatures } from '@tanstack/react-table';
 import {
   ArrowDown,
   ArrowUp,
@@ -61,40 +61,38 @@ export interface TemplateColumnOptions {
  * not an unordered page, so a column whose capability is missing (or still
  * loading) renders as plain text.
  */
-function sortableHeader(
-  label: string,
-  field: TemplateOrderByField,
-  options: TemplateColumnOptions,
-) {
-  const Header = () => {
-    if (!options.sortableFields.includes(field)) {
-      return <span>{label}</span>;
-    }
+function SortableHeader({
+  label,
+  field,
+  options,
+}: {
+  label: string;
+  field: TemplateOrderByField;
+  options: TemplateColumnOptions;
+}) {
+  if (!options.sortableFields.includes(field)) {
+    return <span>{label}</span>;
+  }
 
-    const isSorted = options.currentSort?.field === field;
-    const Icon = !isSorted
-      ? ArrowUpDown
-      : options.currentSort?.direction === 'desc'
-        ? ArrowDown
-        : ArrowUp;
+  const isSorted = options.currentSort?.field === field;
+  const Icon = !isSorted
+    ? ArrowUpDown
+    : options.currentSort?.direction === 'desc'
+      ? ArrowDown
+      : ArrowUp;
 
-    return (
-      <Button
-        variant="ghost"
-        size="sm"
-        className="h-8 -ml-3"
-        onClick={() => options.onSort(field)}
-        data-testid={`sort-${field}`}
-      >
-        {label}
-        <Icon className="ml-1 h-3 w-3" />
-      </Button>
-    );
-  };
-
-  Header.displayName = `SortableHeader(${field})`;
-
-  return Header;
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="h-8 -ml-3"
+      onClick={() => options.onSort(field)}
+      data-testid={`sort-${field}`}
+    >
+      {label}
+      <Icon className="ml-1 h-3 w-3" />
+    </Button>
+  );
 }
 
 function TagList({ template }: { template: ManagedTemplate }) {
@@ -129,6 +127,15 @@ function TagList({ template }: { template: ManagedTemplate }) {
 }
 
 /**
+ * The TanStack Table features the templates table uses: none beyond the core.
+ * The API paginates, filters and sorts, and the sortable headers call back into
+ * the URL filters, so the table only lays out rows and cells.
+ */
+export const templateTableFeatures = tableFeatures({});
+
+export type TemplateTableFeatures = typeof templateTableFeatures;
+
+/**
  * Column definitions for the templates table.
  *
  * Every row is one *version* of a template — `key` alone does not identify it —
@@ -137,7 +144,7 @@ function TagList({ template }: { template: ManagedTemplate }) {
  */
 export function createTemplateColumns(
   options: TemplateColumnOptions,
-): ColumnDef<ManagedTemplate>[] {
+): ColumnDef<TemplateTableFeatures, ManagedTemplate>[] {
   const {
     onViewDetails,
     onCreateVersion,
@@ -151,25 +158,23 @@ export function createTemplateColumns(
   return [
     {
       accessorKey: 'key',
-      header: sortableHeader('Key', 'key', options),
+      header: () => <SortableHeader label="Key" field="key" options={options} />,
       cell: ({ row }) => (
         <span className="font-mono text-xs break-all" title={row.original.key}>
           {row.original.key}
         </span>
       ),
-      size: 180,
     },
 
     {
       accessorKey: 'version',
-      header: sortableHeader('Version', 'version', options),
+      header: () => <SortableHeader label="Version" field="version" options={options} />,
       cell: ({ row }) => <span className="tabular-nums text-xs">v{row.original.version}</span>,
-      size: 70,
     },
 
     {
       accessorKey: 'name',
-      header: sortableHeader('Name', 'name', options),
+      header: () => <SortableHeader label="Name" field="name" options={options} />,
       cell: ({ row }) => (
         <div className="flex items-center gap-2 min-w-0">
           <span className="truncate block max-w-[14rem]" title={row.original.name}>
@@ -184,21 +189,18 @@ export function createTemplateColumns(
           )}
         </div>
       ),
-      size: 220,
     },
 
     {
       accessorKey: 'status',
-      header: sortableHeader('Status', 'status', options),
+      header: () => <SortableHeader label="Status" field="status" options={options} />,
       cell: ({ row }) => <TemplateStatusBadge status={row.original.status} />,
-      size: 90,
     },
 
     {
       id: 'tags',
       header: 'Tags',
       cell: ({ row }) => <TagList template={row.original} />,
-      size: 200,
     },
 
     {
@@ -212,16 +214,14 @@ export function createTemplateColumns(
           {row.original.templateManagedBackend || EMPTY}
         </span>
       ),
-      size: 120,
     },
 
     {
       accessorKey: 'updatedAt',
-      header: sortableHeader('Updated', 'updatedAt', options),
+      header: () => <SortableHeader label="Updated" field="updatedAt" options={options} />,
       cell: ({ row }) => (
         <span className="text-xs whitespace-nowrap">{formatDate(row.original.updatedAt)}</span>
       ),
-      size: 130,
     },
 
     {
@@ -353,7 +353,6 @@ export function createTemplateColumns(
           </DropdownMenu>
         );
       },
-      size: 60,
     },
   ];
 }

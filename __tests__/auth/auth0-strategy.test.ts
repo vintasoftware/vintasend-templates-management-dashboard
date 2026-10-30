@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 /**
  * Tests for the Auth0-backed auth strategy.
@@ -10,22 +8,22 @@
  * transient Auth0 outage quietly exposes the dashboard or locks it down.
  */
 
-const getSession = jest.fn();
+const getSession = vi.fn();
 
-jest.mock('@/lib/auth0', () => ({
+vi.mock('@/lib/auth0', () => ({
   auth0: {
     getSession: (...args: unknown[]) => getSession(...(args as [])),
   },
 }));
 
-jest.mock('@auth0/nextjs-auth0/client', () => ({
+vi.mock('@auth0/nextjs-auth0/client', () => ({
   Auth0Provider: function Auth0Provider() {
     return null;
   },
 }));
 
-import { NextRequest } from 'next/server';
 import { Auth0Provider } from '@auth0/nextjs-auth0/client';
+import { NextRequest } from 'next/server';
 import { Auth0Strategy } from '@/lib/auth/strategies/auth0-strategy';
 
 const request = (path = '/notifications') => new NextRequest(`https://dashboard.test${path}`);
@@ -33,7 +31,7 @@ const request = (path = '/notifications') => new NextRequest(`https://dashboard.
 let strategy: Auth0Strategy;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   strategy = new Auth0Strategy();
 });
 
