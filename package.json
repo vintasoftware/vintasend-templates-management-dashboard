@@ -1,6 +1,6 @@
 {
   "name": "vintasend-templates-management-dashboard",
-  "version": "1.0.0-alpha7",
+  "version": "1.0.0-alpha8",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vintasoftware/vintasend-templates-management-dashboard.git"
@@ -36,7 +36,7 @@
     "server-only": "^0.0.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
-    "vintasend-templates-management-dashboard-core": "1.0.0-alpha7"
+    "vintasend-templates-management-dashboard-core": "1.0.0-alpha8"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4",
