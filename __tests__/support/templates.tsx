@@ -10,21 +10,22 @@
  */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, type RenderOptions } from '@testing-library/react';
-import { useState, type ReactElement, type ReactNode } from 'react';
+import { type RenderOptions, render } from '@testing-library/react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import {
-  TemplatesProvider,
   createTemplatesClient,
   type ManagedTemplate,
   type ManagedTemplateTag,
+  TemplatesProvider,
 } from 'vintasend-templates-management-dashboard-core';
+import type { Mock } from 'vitest';
 
 export type StubbedResponse = {
   status?: number;
   body: unknown;
 };
 
-export type FetchStub = jest.Mock<Promise<Response>, [Request]>;
+export type FetchStub = Mock<(request: Request) => Promise<Response>>;
 
 /**
  * Builds a `fetch` that answers from a path -> response map. Keys are matched
@@ -37,7 +38,7 @@ export type FetchStub = jest.Mock<Promise<Response>, [Request]>;
 export function createFetchStub(
   routes: Record<string, StubbedResponse | ((request: Request) => StubbedResponse)>,
 ): FetchStub {
-  return jest.fn(async (request: Request) => {
+  return vi.fn(async (request: Request) => {
     const url = typeof request === 'string' ? request : request.url;
     const match = Object.keys(routes)
       // Longest key first, so '/templates/{key}/versions' wins over

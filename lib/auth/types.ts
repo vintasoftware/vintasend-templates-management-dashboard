@@ -1,5 +1,5 @@
-import type { ComponentType, ReactNode } from 'react';
 import type { NextRequest, NextResponse } from 'next/server';
+import type { ComponentType, ReactNode } from 'react';
 
 /**
  * Supported auth providers for the dashboard.

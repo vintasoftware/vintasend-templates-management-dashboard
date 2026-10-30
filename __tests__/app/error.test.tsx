@@ -1,7 +1,5 @@
-/**
- * @jest-environment jsdom
- * @jest-environment-options {"url": "https://dashboard.test/tags"}
- */
+// @vitest-environment jsdom
+// @vitest-environment-options {"url": "https://dashboard.test/tags"}
 
 /**
  * Tests for the route error boundary.
@@ -16,24 +14,25 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TemplatesError from '@/app/error';
 
-const renderBoundary = (error = new Error('API unreachable'), reset = jest.fn()) => {
-  const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+const renderBoundary = (error = new Error('API unreachable'), reset = vi.fn()) => {
+  const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
   const result = render(<TemplatesError error={error} reset={reset} />);
   return { ...result, reset, consoleError };
 };
 
+// Vitest runs on Node's real `process.env`, which only accepts plain writable
+// values, so the override goes through `vi.stubEnv` rather than a descriptor.
 const withNodeEnv = (value: string, run: () => void) => {
-  const descriptor = Object.getOwnPropertyDescriptor(process.env, 'NODE_ENV');
-  Object.defineProperty(process.env, 'NODE_ENV', { value, configurable: true });
+  vi.stubEnv('NODE_ENV', value);
   try {
     run();
   } finally {
-    if (descriptor) Object.defineProperty(process.env, 'NODE_ENV', descriptor);
+    vi.unstubAllEnvs();
   }
 };
 
 afterEach(() => {
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('TemplatesError', () => {

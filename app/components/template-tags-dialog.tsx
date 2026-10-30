@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import {
   getApiErrorMessage,
-  useSetTemplateTags,
   type ManagedTemplate,
+  useSetTemplateTags,
 } from 'vintasend-templates-management-dashboard-core';
 
 import { Button } from '@/components/ui/button';

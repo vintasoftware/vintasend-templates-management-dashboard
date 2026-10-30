@@ -4,16 +4,16 @@ import { Plus } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import {
   getApiErrorMessage,
-  useFilteredTemplates,
   type ManagedTemplate,
   type TemplateOrderByField,
+  useFilteredTemplates,
 } from 'vintasend-templates-management-dashboard-core';
 import { useNextRouterAdapter } from 'vintasend-templates-management-dashboard-core/next';
 
 import { Button } from '@/components/ui/button';
 
 import { DeleteTemplateDialog } from './delete-template-dialog';
-import { TemplateDetail, type DetailTab, type TemplateSelection } from './template-detail';
+import { type DetailTab, TemplateDetail, type TemplateSelection } from './template-detail';
 import { TemplateFormDialog } from './template-form-dialog';
 import { TemplatePreviewDialog } from './template-preview-dialog';
 import { TemplateStatusDialog } from './template-status-dialog';

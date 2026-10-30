@@ -6,9 +6,9 @@ import { toast } from 'sonner';
 import {
   getApiErrorCode,
   getApiErrorMessage,
-  useSetTemplateStatus,
   type ManagedTemplate,
   type TemplateStatus,
+  useSetTemplateStatus,
 } from 'vintasend-templates-management-dashboard-core';
 
 import { Button } from '@/components/ui/button';

@@ -36,7 +36,11 @@ export function ListLoadingFallback() {
             <thead className="border-b bg-muted">
               <tr>
                 {Array.from({ length: 7 }).map((_, i) => (
-                  <th key={`skeleton-head-${i}`} className="px-4 py-3 text-left">
+                  <th
+                    // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                    key={`skeleton-head-${i}`}
+                    className="px-4 py-3 text-left"
+                  >
                     <Skeleton className="h-4 w-16" />
                   </th>
                 ))}
@@ -44,9 +48,17 @@ export function ListLoadingFallback() {
             </thead>
             <tbody>
               {Array.from({ length: 10 }).map((_, row) => (
-                <tr key={`skeleton-row-${row}`} className="border-b">
+                <tr
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                  key={`skeleton-row-${row}`}
+                  className="border-b"
+                >
                   {Array.from({ length: 7 }).map((_, cell) => (
-                    <td key={`skeleton-cell-${row}-${cell}`} className="px-4 py-3">
+                    <td
+                      // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                      key={`skeleton-cell-${row}-${cell}`}
+                      className="px-4 py-3"
+                    >
                       <Skeleton className="h-4 w-full" />
                     </td>
                   ))}

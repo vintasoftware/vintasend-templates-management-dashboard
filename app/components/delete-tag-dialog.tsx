@@ -4,8 +4,8 @@ import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   getApiErrorMessage,
-  useDeleteTag,
   type ManagedTemplateTag,
+  useDeleteTag,
 } from 'vintasend-templates-management-dashboard-core';
 
 import {

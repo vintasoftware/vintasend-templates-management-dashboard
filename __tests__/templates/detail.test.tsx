@@ -17,9 +17,9 @@ import {
   dataResponse,
   renderWithTemplates,
   requestLog,
+  type StubbedResponse,
   tag,
   template,
-  type StubbedResponse,
 } from '../support/templates';
 
 const composition = (overrides: Record<string, unknown> = {}) =>
@@ -49,8 +49,8 @@ const renderDetail = (
   renderWithTemplates(
     <TemplateDetail
       selection={{ key: 'welcome-email', version: 3 }}
-      onClose={jest.fn()}
-      onSelectVersion={jest.fn()}
+      onClose={vi.fn()}
+      onSelectVersion={vi.fn()}
       {...props}
     />,
     { fetch: fetch as unknown as typeof globalThis.fetch },
@@ -63,7 +63,7 @@ it('stays idle while it is closed', async () => {
   const fetch = createFetchStub({});
 
   renderWithTemplates(
-    <TemplateDetail selection={null} onClose={jest.fn()} onSelectVersion={jest.fn()} />,
+    <TemplateDetail selection={null} onClose={vi.fn()} onSelectVersion={vi.fn()} />,
     { fetch: fetch as unknown as typeof globalThis.fetch },
   );
 
@@ -161,7 +161,7 @@ it('says when a backend keeps no audit trail, instead of showing an empty list',
 
 it('switches to another version from the versions tab', async () => {
   const user = userEvent.setup();
-  const onSelectVersion = jest.fn();
+  const onSelectVersion = vi.fn();
 
   renderDetail(
     {

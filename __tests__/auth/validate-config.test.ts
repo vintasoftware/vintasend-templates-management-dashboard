@@ -2,8 +2,8 @@
  * Tests for auth configuration validation.
  */
 
-import { assertValidAuthConfig } from '@/lib/auth/validate-config';
 import type { AuthStrategy } from '@/lib/auth/types';
+import { assertValidAuthConfig } from '@/lib/auth/validate-config';
 
 const strategyReporting = (missing: string[]) =>
   ({ validateConfig: () => missing }) as unknown as AuthStrategy;

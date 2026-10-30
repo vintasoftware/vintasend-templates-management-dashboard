@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import {
   getApiErrorMessage,
+  type ManagedTemplate,
   useDeleteTemplate,
   useDeleteTemplateVersion,
-  type ManagedTemplate,
 } from 'vintasend-templates-management-dashboard-core';
 
 import {

@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 /**
  * Tests for the dashboard's proxy (middleware).
@@ -11,38 +9,40 @@
  * and which misconfigurations must fail loudly instead of silently redirecting.
  */
 
-// Typed as jest.Mock so the return types stay open: these stubs are re-armed
-// per test with different handlers and matcher results.
-const clerkHandler: jest.Mock = jest.fn();
-const clerkMiddleware: jest.Mock = jest.fn(() => clerkHandler);
-const createRouteMatcher: jest.Mock = jest.fn(() => () => true);
+import type { Mock } from 'vitest';
 
-jest.mock('@clerk/nextjs/server', () => ({
+// Typed as Mock so the return types stay open: these stubs are re-armed
+// per test with different handlers and matcher results.
+const clerkHandler: Mock = vi.fn();
+const clerkMiddleware: Mock = vi.fn(() => clerkHandler);
+const createRouteMatcher: Mock = vi.fn(() => () => true);
+
+vi.mock('@clerk/nextjs/server', () => ({
   clerkMiddleware: (...args: unknown[]) => clerkMiddleware(...(args as [])),
   createRouteMatcher: (...args: unknown[]) => createRouteMatcher(...(args as [])),
 }));
 
-const getSession: jest.Mock = jest.fn();
-const auth0Middleware: jest.Mock = jest.fn();
+const getSession: Mock = vi.fn();
+const auth0Middleware: Mock = vi.fn();
 
-jest.mock('@/lib/auth0', () => ({
+vi.mock('@/lib/auth0', () => ({
   auth0: {
     getSession: (...args: unknown[]) => getSession(...(args as [])),
     middleware: (...args: unknown[]) => auth0Middleware(...(args as [])),
   },
 }));
 
-const resolveAuthStrategy: jest.Mock = jest.fn();
-jest.mock('@/lib/auth', () => ({
+const resolveAuthStrategy: Mock = vi.fn();
+vi.mock('@/lib/auth', () => ({
   resolveAuthStrategy: (...args: unknown[]) => resolveAuthStrategy(...(args as [])),
 }));
 
-const assertValidAuthConfig: jest.Mock = jest.fn();
-jest.mock('@/lib/auth/validate-config', () => ({
+const assertValidAuthConfig: Mock = vi.fn();
+vi.mock('@/lib/auth/validate-config', () => ({
   assertValidAuthConfig: (...args: unknown[]) => assertValidAuthConfig(...(args as [])),
 }));
 
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { type NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { config, proxy } from '@/proxy';
 
 const makeRequest = (path: string) => new NextRequest(`https://dashboard.test${path}`);
@@ -51,7 +51,7 @@ const event = {} as NextFetchEvent;
 const originalEnv = process.env.AUTH_PROVIDER;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   createRouteMatcher.mockReturnValue(() => true);
 });
 
@@ -182,7 +182,7 @@ describe('proxy — strategy fallback', () => {
   });
 
   it('continues when the strategy allows the request', async () => {
-    const protectRoute = jest.fn().mockResolvedValue(null);
+    const protectRoute = vi.fn().mockResolvedValue(null);
     resolveAuthStrategy.mockReturnValue({ protectRoute });
 
     const request = makeRequest('/tags');
@@ -196,7 +196,7 @@ describe('proxy — strategy fallback', () => {
   it('returns the strategy response when the strategy blocks the request', async () => {
     const redirect = NextResponse.redirect('https://dashboard.test/login');
     resolveAuthStrategy.mockReturnValue({
-      protectRoute: jest.fn().mockResolvedValue(redirect),
+      protectRoute: vi.fn().mockResolvedValue(redirect),
     });
 
     const result = await proxy(makeRequest('/tags'), event);
@@ -217,9 +217,9 @@ describe('proxy — strategy fallback', () => {
   });
 
   it('redirects to /sign-in when the strategy fails for an unexpected reason', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     resolveAuthStrategy.mockReturnValue({
-      protectRoute: jest.fn().mockRejectedValue(new Error('upstream auth service is down')),
+      protectRoute: vi.fn().mockRejectedValue(new Error('upstream auth service is down')),
     });
 
     const result = (await proxy(makeRequest('/tags'), event)) as NextResponse;
@@ -231,7 +231,7 @@ describe('proxy — strategy fallback', () => {
   });
 
   it('redirects to /sign-in when a non-Error value is thrown', async () => {
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     resolveAuthStrategy.mockImplementation(() => {
       throw 'string failure';
     });

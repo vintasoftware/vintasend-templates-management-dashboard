@@ -13,8 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # next@16 requires Node >= 20.9.
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [22.x, 24.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +37,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        # Enforces the coverage thresholds in jest.config.js.
+        # Enforces the coverage thresholds in vitest.config.mts.
         run: npm run test:coverage
 
       - name: Build

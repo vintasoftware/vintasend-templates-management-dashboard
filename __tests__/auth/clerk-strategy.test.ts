@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 /**
  * Tests for the Clerk-backed auth strategy.
@@ -10,27 +8,27 @@
  * one. The user mapping also has several fallbacks worth pinning down.
  */
 
-const auth = jest.fn();
-const currentUser = jest.fn();
-const getAuth = jest.fn();
-const getUser = jest.fn();
-const clerkClient = jest.fn(async () => ({ users: { getUser } }));
+const auth = vi.fn();
+const currentUser = vi.fn();
+const getAuth = vi.fn();
+const getUser = vi.fn();
+const clerkClient = vi.fn(async () => ({ users: { getUser } }));
 
-jest.mock('@clerk/nextjs', () => ({
+vi.mock('@clerk/nextjs', () => ({
   ClerkProvider: function ClerkProvider() {
     return null;
   },
 }));
 
-jest.mock('@clerk/nextjs/server', () => ({
+vi.mock('@clerk/nextjs/server', () => ({
   auth: (...args: unknown[]) => auth(...(args as [])),
   currentUser: (...args: unknown[]) => currentUser(...(args as [])),
   getAuth: (...args: unknown[]) => getAuth(...(args as [])),
   clerkClient: (...args: unknown[]) => clerkClient(...(args as [])),
 }));
 
-import { NextRequest } from 'next/server';
 import { ClerkProvider } from '@clerk/nextjs';
+import { NextRequest } from 'next/server';
 import { ClerkStrategy } from '@/lib/auth/strategies/clerk-strategy';
 
 const request = () => new NextRequest('https://dashboard.test/notifications');
@@ -49,7 +47,7 @@ const clerkUser = (overrides: Record<string, unknown> = {}) => ({
 let strategy: ClerkStrategy;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   strategy = new ClerkStrategy();
 });
 

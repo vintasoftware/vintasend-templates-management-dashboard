@@ -2,9 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // vintasend-templates-management-dashboard-core is published as ESM only.
-  // Listing it here makes Next transpile it for every target, and next/jest
-  // reads the same list when it builds the test transform, so it is also what
-  // lets Jest load the package.
+  // Listing it here makes Next transpile it for every target. (Vitest inlines it
+  // separately; see `server.deps.inline` in vitest.config.mts.)
   transpilePackages: ['vintasend-templates-management-dashboard-core'],
 
   images: {

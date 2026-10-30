@@ -5,17 +5,17 @@
  * unauthenticated dashboard, so the error paths matter as much as the happy one.
  */
 
-jest.mock('@/lib/auth/strategies/clerk-strategy', () => ({
+vi.mock('@/lib/auth/strategies/clerk-strategy', () => ({
   ClerkStrategy: class ClerkStrategy {},
 }));
 
-jest.mock('@/lib/auth/strategies/auth0-strategy', () => ({
+vi.mock('@/lib/auth/strategies/auth0-strategy', () => ({
   Auth0Strategy: class Auth0Strategy {},
 }));
 
 import { resolveAuthStrategy } from '@/lib/auth/resolve-strategy';
-import { ClerkStrategy } from '@/lib/auth/strategies/clerk-strategy';
 import { Auth0Strategy } from '@/lib/auth/strategies/auth0-strategy';
+import { ClerkStrategy } from '@/lib/auth/strategies/clerk-strategy';
 
 const originalProvider = process.env.AUTH_PROVIDER;
 

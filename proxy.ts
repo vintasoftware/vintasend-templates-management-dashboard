@@ -1,8 +1,8 @@
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { auth0 } from './lib/auth0';
+import { type NextFetchEvent, type NextRequest, NextResponse } from 'next/server';
 import { resolveAuthStrategy } from './lib/auth';
 import { assertValidAuthConfig } from './lib/auth/validate-config';
+import { auth0 } from './lib/auth0';
 
 const PUBLIC_ROUTES = ['/sign-in', '/sign-out', '/auth'];
 

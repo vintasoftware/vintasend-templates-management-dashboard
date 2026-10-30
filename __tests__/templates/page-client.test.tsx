@@ -8,12 +8,12 @@
  * ignores.
  */
 
-const replace = jest.fn();
-const push = jest.fn();
+const replace = vi.fn();
+const push = vi.fn();
 
 let currentSearch = '';
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace, push }),
   usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(currentSearch),
@@ -28,12 +28,12 @@ import {
   ALL_SORTABLE,
   createFetchStub,
   dataResponse,
+  type FetchStub,
   lastQueryFor,
   paginated,
   renderWithTemplates,
-  template,
-  type FetchStub,
   type StubbedResponse,
+  template,
 } from '../support/templates';
 
 const renderPage = (routes: Record<string, StubbedResponse>) => {
@@ -65,7 +65,7 @@ const lastReplacedQuery = () =>
 const listQuery = (fetch: FetchStub) => lastQueryFor(fetch, '/api/v1/templates');
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   currentSearch = '';
 });
 
@@ -236,5 +236,93 @@ describe('sorting', () => {
       expect(lastReplacedQuery().get('orderByField')).toBeNull();
       expect(lastReplacedQuery().get('orderByDirection')).toBeNull();
     });
+  });
+});
+
+describe('row actions', () => {
+  /**
+   * The table only reports which action was picked; it is the page that turns
+   * that into an open panel or dialog. These check that wiring end to end, and
+   * that closing each one hands the page back.
+   */
+  const renderWithRow = () =>
+    renderPage({
+      '/api/v1/templates/welcome-email/versions': { body: { data: [template()] } },
+      '/api/v1/templates/welcome-email/status-history': { body: { data: [] } },
+      '/api/v1/templates/welcome-email/composition': {
+        body: dataResponse({
+          key: 'welcome-email',
+          version: 3,
+          isAbstract: false,
+          references: [],
+          composedBodyTemplate: '<p>Hello {{ name }}</p>',
+          composedSubjectTemplate: 'Welcome, {{ name }}',
+          composedPreheaderTemplate: null,
+        }),
+      },
+      '/api/v1/templates/welcome-email': { body: dataResponse(template()) },
+      '/api/v1/templates': { body: paginated([template()]) },
+    });
+
+  const pickAction = async (user: ReturnType<typeof userEvent.setup>, testId: string) => {
+    await user.click(await screen.findByRole('button', { name: 'Open menu' }));
+    await user.click(await screen.findByTestId(`${testId}-${template().id}`));
+  };
+
+  it('opens the create form from the page header', async () => {
+    const user = userEvent.setup();
+    renderWithRow();
+
+    await user.click(screen.getByTestId('new-template'));
+
+    expect(await screen.findByRole('dialog', { name: 'New template' })).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('opens the detail panel for the clicked row, and closes it again', async () => {
+    const user = userEvent.setup();
+    renderWithRow();
+
+    await user.click(await screen.findByTestId('template-row-welcome-email-v3'));
+
+    expect(await screen.findByText('welcome-email · v3')).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => expect(screen.queryByText('welcome-email · v3')).not.toBeInTheDocument());
+  });
+
+  it.each([
+    ['view-details', 'welcome-email · v3'],
+    ['history', 'welcome-email · v3'],
+  ])('opens the detail panel from the "%s" action', async (action, description) => {
+    const user = userEvent.setup();
+    renderWithRow();
+
+    await pickAction(user, action);
+
+    expect(await screen.findByText(description)).toBeInTheDocument();
+  });
+
+  it.each([
+    ['new-version', 'dialog', 'New version of welcome-email'],
+    ['preview', 'dialog', 'Preview welcome-email v3'],
+    ['edit-tags', 'dialog', 'Edit tags'],
+    ['change-status', 'dialog', 'Change status'],
+    ['delete', 'alertdialog', 'Delete template'],
+  ] as const)('opens the "%s" action as a %s, and closes it again', async (action, role, name) => {
+    const user = userEvent.setup();
+    renderWithRow();
+
+    await pickAction(user, action);
+
+    expect(await screen.findByRole(role, { name })).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => expect(screen.queryByRole(role)).not.toBeInTheDocument());
   });
 });

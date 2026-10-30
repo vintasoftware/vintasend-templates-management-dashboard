@@ -1,10 +1,8 @@
 'use client';
 'use no memo';
 
-import type { Cell } from '@tanstack/react-table';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { flexRender, useTable } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useMemo } from 'react';
 import type { ManagedTemplate } from 'vintasend-templates-management-dashboard-core';
 
 import { Button } from '@/components/ui/button';
@@ -18,7 +16,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { createTemplateColumns, type TemplateColumnOptions } from './columns';
+import {
+  createTemplateColumns,
+  type TemplateColumnOptions,
+  templateTableFeatures,
+} from './columns';
 
 export interface TemplatesTableProps extends TemplateColumnOptions {
   data: ManagedTemplate[];
@@ -36,9 +38,9 @@ export interface TemplatesTableProps extends TemplateColumnOptions {
  * The templates table.
  *
  * TanStack Table is used purely as a headless renderer: the list is paginated,
- * filtered and sorted by the API, so every model here is manual and sorting is
- * handled by the column headers calling back into the URL filters rather than
- * by the table's own state.
+ * filtered and sorted by the API, so no row model beyond the core one is
+ * registered and sorting is handled by the column headers calling back into the
+ * URL filters rather than by the table's own state.
  */
 export function TemplatesTable({
   data,
@@ -52,18 +54,14 @@ export function TemplatesTable({
   onRowClick,
   ...columnOptions
 }: TemplatesTableProps) {
-  const columns = useMemo(() => createTemplateColumns(columnOptions), [columnOptions]);
+  const columns = createTemplateColumns(columnOptions);
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
+  const table = useTable({
+    features: templateTableFeatures,
     data,
     columns,
     // A row is a version, so `key` is not unique when every version is shown.
     getRowId: (row) => row.id,
-    getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    manualFiltering: true,
-    manualSorting: true,
   });
 
   const rows = table.getRowModel().rows;
@@ -88,9 +86,12 @@ export function TemplatesTable({
           <TableBody>
             {isLoading &&
               Array.from({ length: Math.min(pageSize, 10) }).map((_, rowIndex) => (
-                <TableRow key={`skeleton-row-${rowIndex}`}>
-                  {columns.map((_column, cellIndex) => (
-                    <TableCell key={`skeleton-cell-${rowIndex}-${cellIndex}`} className="py-2 px-3">
+                <TableRow
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static loading placeholders that are never reordered, so their position is their identity.
+                  key={`skeleton-row-${rowIndex}`}
+                >
+                  {table.getAllLeafColumns().map((column) => (
+                    <TableCell key={column.id} className="py-2 px-3">
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
                   ))}
@@ -116,7 +117,7 @@ export function TemplatesTable({
                   className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
                   onClick={() => onRowClick?.(row.original)}
                 >
-                  {row.getVisibleCells().map((cell: Cell<ManagedTemplate, unknown>) => (
+                  {row.getAllCells().map((cell) => (
                     <TableCell key={cell.id} className="py-2 px-3">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

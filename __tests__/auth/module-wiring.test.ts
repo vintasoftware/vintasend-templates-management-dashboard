@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 /**
  * Tests for the auth module's wiring: the shared Auth0 client and the barrel
@@ -8,21 +6,25 @@
  * dropped re-export breaks sign-in everywhere at once.
  */
 
-const Auth0Client = jest.fn();
+const Auth0Client = vi.fn();
 
-jest.mock('@auth0/nextjs-auth0/server', () => ({
-  Auth0Client: function (...args: unknown[]) {
-    Auth0Client(...(args as []));
+// The module under test calls `new Auth0Client(...)`, so the stand-in has to be
+// constructible.
+vi.mock('@auth0/nextjs-auth0/server', () => ({
+  Auth0Client: class {
+    constructor(...args: unknown[]) {
+      Auth0Client(...(args as []));
+    }
   },
 }));
 
-jest.mock('@auth0/nextjs-auth0/client', () => ({ Auth0Provider: () => null }));
-jest.mock('@clerk/nextjs', () => ({ ClerkProvider: () => null, useUser: () => ({}) }));
-jest.mock('@clerk/nextjs/server', () => ({
-  auth: jest.fn(),
-  currentUser: jest.fn(),
-  getAuth: jest.fn(),
-  clerkClient: jest.fn(),
+vi.mock('@auth0/nextjs-auth0/client', () => ({ Auth0Provider: () => null }));
+vi.mock('@clerk/nextjs', () => ({ ClerkProvider: () => null, useUser: () => ({}) }));
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: vi.fn(),
+  currentUser: vi.fn(),
+  getAuth: vi.fn(),
+  clerkClient: vi.fn(),
 }));
 
 describe('auth0 client', () => {
@@ -31,11 +33,11 @@ describe('auth0 client', () => {
   afterEach(() => {
     if (savedBaseUrl === undefined) delete process.env.APP_BASE_URL;
     else process.env.APP_BASE_URL = savedBaseUrl;
-    jest.resetModules();
+    vi.resetModules();
   });
 
   it('builds the callback URL from APP_BASE_URL and requests the profile scopes', async () => {
-    jest.resetModules();
+    vi.resetModules();
     Auth0Client.mockClear();
     process.env.APP_BASE_URL = 'https://dashboard.test';
 

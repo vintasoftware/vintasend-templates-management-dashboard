@@ -5,21 +5,21 @@
  * place, Auth0 has to bounce straight to its hosted login.
  */
 
-const resolveAuthStrategy = jest.fn();
-const redirect = jest.fn(() => {
+const resolveAuthStrategy = vi.fn();
+const redirect = vi.fn(() => {
   // Next's redirect() never returns; it throws a control-flow signal.
   throw new Error('NEXT_REDIRECT');
 });
 
-jest.mock('@/lib/auth', () => ({
+vi.mock('@/lib/auth', () => ({
   resolveAuthStrategy: (...args: unknown[]) => resolveAuthStrategy(...(args as [])),
 }));
 
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   redirect: (...args: unknown[]) => redirect(...(args as [])),
 }));
 
-jest.mock('@clerk/nextjs', () => ({
+vi.mock('@clerk/nextjs', () => ({
   SignIn: () => <div data-testid="clerk-sign-in" />,
 }));
 
@@ -29,7 +29,7 @@ import SignInPage from '@/app/sign-in/[[...sign-in]]/page';
 const savedProvider = process.env.AUTH_PROVIDER;
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   resolveAuthStrategy.mockReturnValue({ getSignInUrl: () => '/auth/login' });
 });
 

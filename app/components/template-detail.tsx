@@ -265,6 +265,7 @@ export function TemplateDetail({
             <ul className="mt-2 space-y-1">
               {composition.references.map((reference, index) => (
                 <li
+                  // biome-ignore lint/suspicious/noArrayIndexKey: references carry no id and the same one can repeat; the index only tells duplicates apart in a list that is replaced wholesale, never reordered.
                   key={`${reference.kind}-${reference.key}-${reference.field}-${index}`}
                   className="flex items-center gap-2 text-sm"
                 >
@@ -374,6 +375,7 @@ export function TemplateDetail({
       <ol className="space-y-2" data-testid="template-history">
         {history.map((entry, index) => (
           <li
+            // biome-ignore lint/suspicious/noArrayIndexKey: history entries carry no id and can repeat; the index only tells duplicates apart in a list that is replaced wholesale, never reordered.
             key={`${entry.version}-${entry.status}-${entry.createdAt}-${index}`}
             className="flex items-center gap-2 text-sm border rounded-md px-3 py-2"
           >

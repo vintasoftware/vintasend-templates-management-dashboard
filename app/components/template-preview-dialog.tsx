@@ -5,9 +5,9 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   getApiErrorCode,
   getApiErrorMessage,
-  usePreviewTemplate,
   type ManagedTemplate,
   type TemplatePreview,
+  usePreviewTemplate,
 } from 'vintasend-templates-management-dashboard-core';
 
 import { Button } from '@/components/ui/button';
@@ -57,6 +57,7 @@ function RenderedBlock({ title, value, testId }: { title: string; value: string;
           <div
             data-testid={testId}
             className="bg-background border rounded-md p-3 text-sm overflow-x-auto max-h-72"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: rendering the API's output as markup is the point of this tab; see the trust note above.
             dangerouslySetInnerHTML={{ __html: value }}
           />
         </TabsContent>
